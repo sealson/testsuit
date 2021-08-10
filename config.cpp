@@ -1,4 +1,5 @@
 #include "config.h"
+#include <asm-generic/errno-base.h>
 #include <cstddef>
 #include <iostream>
 #include <regex>
@@ -34,9 +35,12 @@ config::~config()
 
 int config::parseFile(const char *path)
 {
-    std::ifstream instream(path);
-    std::string line;
     size_t pos;
+    std::string line;
+    std::ifstream instream(path);
+    if (!instream) {
+        return -ENOENT;
+    }
 
     while (std::getline(instream, line)) {
         while((pos = line.find(comment)) != std::string::npos) {
