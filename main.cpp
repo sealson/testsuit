@@ -14,12 +14,11 @@
 #include <regex>
 
 #include "config.h"
+#include "balancer.h"
 
 #ifndef PROJECT_VERSION
 #define PROJECT_VERSION "0.0.1"
 #endif
-#define CONF_FILE_LINESIZE   120
-
 
 static struct option longopts[] = {
     { "config",  required_argument, NULL, 'c' },
@@ -83,6 +82,8 @@ int main(int argc, char *argv[])
     ret = cfg.parseFile(cfg.configPath());
     if (ret)
         return ret;
+
+    balancer blncr;
     
     while (1) {
         if (cfg.isConfigChanged(cfg.configPath())) {
